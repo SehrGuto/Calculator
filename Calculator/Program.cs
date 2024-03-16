@@ -1,38 +1,5 @@
 ﻿using System.Text.RegularExpressions;
-
-class Calculator
-{
-    public static double DoOperation(double num1, double num2, string op)
-    {
-        double result = double.NaN; // Default value is "not-a-number" if an operation, such as division, could result in an error.
-
-        // Use a switch statement to do the math.
-        switch (op)
-        {
-            case "a":
-                result = num1 + num2;
-                break;
-            case "s":
-                result = num1 - num2;
-                break;
-            case "m":
-                result = num1 * num2;
-                break;
-            case "d":
-                // Ask the user to enter a non-zero divisor.
-                if (num2 != 0)
-                {
-                    result = num1 / num2;
-                }
-                break;
-            // Return text for an incorrect option entry.
-            default:
-                break;
-        }
-        return result;
-    }
-}
-
+using CalculatorLibrary;
 class Program
 {
     static void Main(string[] args)
@@ -42,6 +9,7 @@ class Program
         Console.WriteLine("Console Calculator in C#\r");
         Console.WriteLine("------------------------\n");
 
+        Calculator calculator = new Calculator();
         while (!endApp)
         {
             // Declare variables and set to empty.
@@ -66,6 +34,7 @@ class Program
             numInput2 = Console.ReadLine();
 
             double cleanNum2 = 0;
+
             while (!double.TryParse(numInput2, out cleanNum2))
             {
                 Console.Write("This is not valid input. Please enter an integer value: ");
@@ -91,7 +60,7 @@ class Program
             {
                 try
                 {
-                    result = Calculator.DoOperation(cleanNum1, cleanNum2, op);
+                    result = calculator.DoOperation(cleanNum1, cleanNum2, op);
                     if (double.IsNaN(result))
                     {
                         Console.WriteLine("This operation will result in a mathematical error.\n");
@@ -111,6 +80,8 @@ class Program
 
             Console.WriteLine("\n"); // Friendly linespacing.
         }
+        // Add call to close the JSON writer before return
+        calculator.Finish();
         return;
     }
 }
